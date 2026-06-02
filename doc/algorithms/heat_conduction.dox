@@ -1,6 +1,6 @@
 /*!
 
-@file heat_conduction_reference_example.dox
+@file heat_conduction_.dox
 @author Mikhail Lozhnikov
 
 @page heat_conduction_reference_example Эталонный пример реализации расчета
@@ -9,15 +9,15 @@
 @section heat_conduction_reference_example_algo Описание алгоритма
 
 
-Алгоритм реализован в классе mm::HeatConductionReferenceExampleSolver.
+Алгоритм реализован в классе mm::HeatConductionSolver.
 Один шаг алгоритма реализован в функции
-mm::HeatConductionReferenceExampleSolver::MakeStep().
+mm::HeatConductionSolver::MakeStep().
 
 */
 
 
 /*!
-@fn mm::HeatConductionReferenceExampleSolver::MakeStep()
+@fn mm::HeatConductionSolver::MakeStep()
 
 Функция реализует один шаг алгоритма решения уравнения теплопроводности,
 описанного в разделе
