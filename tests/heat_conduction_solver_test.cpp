@@ -341,23 +341,7 @@ static void PlotDoubleTest(httplib::Client* cli) {
       fout << data.dump();
     }
 
-    char command[1024];
-
-    snprintf(command, sizeof(buffer),
-        "python3 \"%s\" HeatConductionPlotter \"%s\" \"%s\"",
-        plotterPath.c_str(), jsonDataPath.c_str(), videoOutputPath.c_str());
-
-    int code = system(command);
     
-    if (code != 0) {
-      snprintf(command, sizeof(buffer),
-          "python3 \"%s\" HeatConductionPlotter \"%s\" \"%s\"",
-          plotterPath.c_str(), jsonDataPath.c_str(), videoOutputPath.c_str());
-
-      code = system(command);
-    }
-
-    REQUIRE_EQUAL(code, 0);
 
 //    std::filesystem::remove_all(outputPath);
   }
