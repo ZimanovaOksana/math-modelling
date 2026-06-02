@@ -6,7 +6,7 @@
 @page algorithms Алгоритмы
 
 Список реализованных алгоритмов:
-- \subpage heat_conduction_reference_example
+- \subpage heat_conduction
 
 
 */
