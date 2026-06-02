@@ -1,5 +1,5 @@
 import sys
-from plotters import heat_conduction_reference_example_plotter as hcrep
+from plotters import heat_conduction_plotter as hcrep
 
 if __name__ == '__main__':
 
@@ -8,8 +8,8 @@ if __name__ == '__main__':
         raise SystemError
 
     plotters = {
-        "HeatConductionReferenceExamplePlotter":
-            hcrep.HeatConductionReferenceExamplePlotter
+        "HeatConductionPlotter":
+            hcrep.HeatConductionPlotter
     }
 
     if not (sys.argv[1] in plotters):

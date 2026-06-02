@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
   /* Сюда нужно вставить обработчик post запроса для алгоритма. */
 
 
-  svr.Post("/HeatConductionReferenceExampleSolver",
+  svr.Post("/HeatConductionSolver",
       [&](const httplib::Request& req, httplib::Response& res) {
     /*
     Поле body структуры httplib::Request содержит текст запроса.
@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
     nlohmann::json output;
 
     /* Если метод завершился с ошибкой, то выставляем статус 400. */
-    if (mm::HeatConductionReferenceExampleSolverMethod(input, &output,
+    if (mm::HeatConductionSolverMethod(input, &output,
         &tasksQueue) < 0)
       res.status = 400;
 

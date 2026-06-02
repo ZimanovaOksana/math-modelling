@@ -1,20 +1,20 @@
 /**
- * @file include/heat_conduction_reference_example_solver_impl.hpp
+ * @file include/heat_conduction_solver_impl.hpp
  */
 
-#ifndef INCLUDE_HEAT_CONDUCTION_REFERENCE_EXAMPLE_SOLVER_IMPL_HPP_
-#define INCLUDE_HEAT_CONDUCTION_REFERENCE_EXAMPLE_SOLVER_IMPL_HPP_
+#ifndef INCLUDE_HEAT_CONDUCTION_SOLVER_IMPL_HPP_
+#define INCLUDE_HEAT_CONDUCTION_SOLVER_IMPL_HPP_
 
 #include <future>
 #include <thread>
 
-#include <heat_conduction_reference_example_solver.hpp>
+#include <heat_conduction_solver.hpp>
 
 namespace mm {
 
 template<typename T>
-HeatConductionReferenceExampleSolver<T>::
-HeatConductionReferenceExampleSolver(
+HeatConductionSolver<T>::
+HeatConductionSolver(
     T tau,
     T finishTime,
     T exportPeriod,
@@ -31,7 +31,7 @@ HeatConductionReferenceExampleSolver(
 }
 
 template<typename T>
-bool HeatConductionReferenceExampleSolver<T>::
+bool HeatConductionSolver<T>::
 IsInside(
     int i,
     int j) const {
@@ -50,7 +50,7 @@ IsInside(
 }
 
 template<typename T>
-void HeatConductionReferenceExampleSolver<T>::
+void HeatConductionSolver<T>::
 ApplyBoundaryConditions() {
 
   int N = 3 * M;
@@ -103,7 +103,7 @@ ApplyBoundaryConditions() {
 }
 
 template<typename T>
-bool HeatConductionReferenceExampleSolver<T>::
+bool HeatConductionSolver<T>::
 MakeStep() {
 
   int N = 3 * M;
@@ -112,6 +112,8 @@ MakeStep() {
       [&](int i, int j) {
         return i * (N + 1) + j;
       };
+
+  uNext = u;
 
   unsigned threads =
       std::thread::hardware_concurrency();
@@ -230,7 +232,7 @@ if (boundary)
 }
 
 template<typename T>
-void HeatConductionReferenceExampleSolver<T>::
+void HeatConductionSolver<T>::
 ExportData(
     nlohmann::json* output) {
 
@@ -239,10 +241,12 @@ ExportData(
   (*output)["fn"];
 
   int N = 3 * M;
+  (*output)["fn"] = nlohmann::json::array();
 
   for (int i = 0;
        i <= N;
        i++) {
+
 
     for (int j = 0;
          j <= N;

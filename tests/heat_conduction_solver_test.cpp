@@ -1,8 +1,8 @@
 /**
- * @file heat_conduction_reference_example_solver_test.cpp
+ * @file heat_conduction_solver_test.cpp
  * @author Mikhail Lozhnikov
  *
- * Тесты для алгоритма mm::HeatConductionReferenceExampleSolver::MakeStep().
+ * Тесты для алгоритма mm::HeatConductionSolver::MakeStep().
  */
 
 #include <httplib.h>
@@ -19,8 +19,8 @@
 static void SimpleDoubleTest(httplib::Client* cli);
 static void PlotDoubleTest(httplib::Client* cli);
 
-void TestHeatConductionReferenceExampleSolver(httplib::Client* cli) {
-  TestSuite suite("TestHeatConductionReferenceExampleSolver");
+void TestHeatConductionSolver(httplib::Client* cli) {
+  TestSuite suite("TestHeatConductionSolver");
 
   RUN_TEST_REMOTE(suite, cli, SimpleDoubleTest);
   RUN_TEST_REMOTE(suite, cli, PlotDoubleTest);
@@ -62,7 +62,7 @@ static void SimpleDoubleTest(httplib::Client* cli) {
   (Можно было сразу строку передать). При передаче JSON данных
   необходимо поставить тип MIME "application/json".
   */
-  auto res = cli->Post("/HeatConductionReferenceExampleSolver", input.dump(),
+  auto res = cli->Post("/HeatConductionSolver", input.dump(),
       "application/json");
 
   if (!res) {
@@ -248,7 +248,7 @@ static void PlotDoubleTest(httplib::Client* cli) {
   (Можно было сразу строку передать). При передаче JSON данных
   необходимо поставить тип MIME "application/json".
   */
-  auto res = cli->Post("/HeatConductionReferenceExampleSolver", input.dump(),
+  auto res = cli->Post("/HeatConductionSolver", input.dump(),
       "application/json");
 
   if (!res) {
@@ -344,14 +344,14 @@ static void PlotDoubleTest(httplib::Client* cli) {
     char command[1024];
 
     snprintf(command, sizeof(buffer),
-        "python3 \"%s\" HeatConductionReferenceExamplePlotter \"%s\" \"%s\"",
+        "python3 \"%s\" HeatConductionPlotter \"%s\" \"%s\"",
         plotterPath.c_str(), jsonDataPath.c_str(), videoOutputPath.c_str());
 
     int code = system(command);
     
     if (code != 0) {
       snprintf(command, sizeof(buffer),
-          "python3 \"%s\" HeatConductionReferenceExamplePlotter \"%s\" \"%s\"",
+          "python3 \"%s\" HeatConductionPlotter \"%s\" \"%s\"",
           plotterPath.c_str(), jsonDataPath.c_str(), videoOutputPath.c_str());
 
       code = system(command);

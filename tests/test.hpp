@@ -16,7 +16,7 @@
  * @brief Набор тестов для класса mm::HeatConductionReferenceExampleSolver.
  * @param cli Указатель на HTTP клиент.
  */
-void TestHeatConductionReferenceExampleSolver(httplib::Client* cli);
+void TestHeatConductionSolver(httplib::Client* cli);
 
 /* Конец вставки. */
 

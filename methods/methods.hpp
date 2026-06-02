@@ -9,7 +9,8 @@
 
 #ifndef METHODS_METHODS_HPP_
 #define METHODS_METHODS_HPP_
-
+#include <nlohmann/json.hpp>
+#include "tasks_queue.hpp"
 namespace mm {
 
 /* Сюда нужно вставить объявление серверной части алгоритма. */
@@ -28,7 +29,7 @@ namespace mm {
  * используя входные данные в JSON формате. Результат также выдаётся
  * в JSON формате.
  */
-int HeatConductionReferenceExampleSolverMethod(const nlohmann::json& input,
+int HeatConductionSolverMethod(const nlohmann::json& input,
     nlohmann::json* output, TasksQueue* tasksQueue);
 
 

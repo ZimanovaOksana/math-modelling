@@ -1,5 +1,5 @@
 /**
- * @file methods/heat_conduction_reference_example_solver_method.cpp
+ * @file methods/heat_conduction_solver_method.cpp
  * @author Mikhail Lozhnikov
  *
  * Парсер входных данных и инициализатор для класса
@@ -10,28 +10,28 @@
 #include <string>
 #include <vector>
 #include <nlohmann/json.hpp>
-#include <heat_conduction_reference_example_solver.hpp>
+#include <heat_conduction_solver.hpp>
 #include "tasks_queue.hpp"
 
-using mm::HeatConductionReferenceExampleSolver;
+using mm::HeatConductionSolver;
 
 namespace mm {
 
 template<typename T, typename Wrapper>
-int HeatConductionReferenceExampleSolverMethodHelper(
+int HeatConductionSolverMethodHelper(
     const nlohmann::json& input,
     nlohmann::json* output,
     TasksQueue* tasksQueue);
 
-int HeatConductionReferenceExampleSolverMethod(const nlohmann::json& input,
+int HeatConductionSolverMethod(const nlohmann::json& input,
     nlohmann::json* output, TasksQueue* tasksQueue) {
   std::string valueType = input.at("value_type");
 
   if (valueType == "float") {
-    return HeatConductionReferenceExampleSolverMethodHelper
+    return HeatConductionSolverMethodHelper
         <float, FloatAbstractSolverWrapper>(input, output, tasksQueue);
   } else if (valueType == "double") {
-    return HeatConductionReferenceExampleSolverMethodHelper<
+    return HeatConductionSolverMethodHelper<
         double, DoubleAbstractSolverWrapper>(input, output, tasksQueue);
   }
 
@@ -54,11 +54,11 @@ int HeatConductionReferenceExampleSolverMethod(const nlohmann::json& input,
  * в JSON формате.
  */
 template<typename T, typename Wrapper>
-int HeatConductionReferenceExampleSolverMethodHelper(
+int HeatConductionSolverMethodHelper(
     const nlohmann::json& input,
     nlohmann::json* output,
     TasksQueue* tasksQueue) {
-  HeatConductionReferenceExampleSolver<T>* solver;
+  HeatConductionSolver<T>* solver;
 
   T tau = input.at("tau");
   T finishTime = input.at("finish_time");
@@ -68,7 +68,7 @@ int HeatConductionReferenceExampleSolverMethodHelper(
   if (M < 0 || tau < 0 || finishTime < 0)
     return -1;
 
-  solver = new HeatConductionReferenceExampleSolver<T>(tau, finishTime,
+  solver = new HeatConductionSolver<T>(tau, finishTime,
       exportPeriod, M);
 
   Wrapper* wrapper = new Wrapper(solver);

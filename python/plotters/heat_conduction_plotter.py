@@ -4,7 +4,7 @@ import matplotlib.animation as manimation
 from plotters.abstract_plotter import AbstractPlotter
 
 
-class HeatConductionReferenceExamplePlotter(AbstractPlotter):
+class HeatConductionPlotter(AbstractPlotter):
 
     def plot(self):
 

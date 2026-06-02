@@ -1,9 +1,9 @@
 /**
- * @file include/heat_conduction_reference_example_solver.hpp
+ * @file include/heat_conduction_solver.hpp
  */
 
-#ifndef INCLUDE_HEAT_CONDUCTION_REFERENCE_EXAMPLE_SOLVER_HPP_
-#define INCLUDE_HEAT_CONDUCTION_REFERENCE_EXAMPLE_SOLVER_HPP_
+#ifndef INCLUDE_HEAT_CONDUCTION_SOLVER_HPP_
+#define INCLUDE_HEAT_CONDUCTION_SOLVER_HPP_
 
 #include <vector>
 #include <future>
@@ -14,16 +14,17 @@
 namespace mm {
 
 template<typename T>
-class HeatConductionReferenceExampleSolver :
+class HeatConductionSolver :
     public AbstractSolver<T> {
  public:
-  HeatConductionReferenceExampleSolver(
+  HeatConductionSolver(
       T tau,
       T finishTime,
       T exportPeriod,
       int M);
 
   bool MakeStep() override;
+      
 
   void ExportData(
       nlohmann::json* output) override;
@@ -46,6 +47,6 @@ class HeatConductionReferenceExampleSolver :
 
 }  // namespace mm
 
-#include <heat_conduction_reference_example_solver_impl.hpp>
+#include <heat_conduction_solver_impl.hpp>
 
 #endif
