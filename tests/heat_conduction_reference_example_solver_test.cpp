@@ -137,22 +137,76 @@ static void SimpleDoubleTest(httplib::Client* cli) {
     auto& lastFrame = output.at("data").back();
     int M = lastFrame.at("data").at("M");
     auto& data = lastFrame.at("data").at("fn");
+REQUIRE(M > 0);
 
-    REQUIRE(M > 0);
+int N = 3 * M;
 
-    // Упрощенная проверка принципа максимума.
-    for (double value : data) {
-        REQUIRE(value < 6.001 && value > 3.999);
-    }
+const double precision = 1e-6;
 
-    const double precision = 1e-8;
+// Проверка принципа максимума
+for (double value : data) {
+  REQUIRE(value >= -1.001);
+  REQUIRE(value <= 4.001);
+}
 
-    // Проверка нижнего граничного условия
-    for (int k = 0; k <= M; k++) {
-      double value = data[0 * (M + 1) + k];
+// Нижняя граница y = 0, u = 1
+for (int j = 0; j <= N; j++) {
+  double value = data[j];
 
-      REQUIRE_CLOSE(value, 5.0, precision);
-    }
+  REQUIRE_CLOSE(
+      value,
+      1.0,
+      precision);
+}
+
+// Правая граница x = 3, u = y + 1
+for (int i = 0; i <= N; i++) {
+
+  double y =
+      static_cast<double>(i) / M;
+
+  double value =
+      data[i * (N + 1) + N];
+
+  REQUIRE_CLOSE(
+      value,
+      y + 1.0,
+      precision);
+}
+
+// Левая внутренняя граница x = 1, y ∈ [2,3]
+for (int i = 2 * M; i <= N; i++) {
+
+  double value =
+      data[i * (N + 1) + M];
+
+  std::cout
+      << "i = "
+      << i
+      << " value = "
+      << value
+      << std::endl;
+
+  REQUIRE_CLOSE(
+      value,
+      -1.0,
+      precision);
+}
+
+// Верхняя граница y = 3, x ∈ [0,1]
+for (int j = 0; j <= M; j++) {
+
+  double x =
+      static_cast<double>(j) / M;
+
+  double value =
+      data[N * (N + 1) + j];
+
+  REQUIRE_CLOSE(
+      value,
+      -x,
+      precision);
+}
   }
 }
 
@@ -262,7 +316,7 @@ static void PlotDoubleTest(httplib::Client* cli) {
 
     auto& data = output.at("data");
 
-    std::filesystem::path pythonDir("python");
+    std::filesystem::path pythonDir("../python");
     std::string plotterPath = (pythonDir / "plot.py").string();
 
     std::filesystem::path dataDir("data");
@@ -290,7 +344,7 @@ static void PlotDoubleTest(httplib::Client* cli) {
     char command[1024];
 
     snprintf(command, sizeof(buffer),
-        "python \"%s\" HeatConductionReferenceExamplePlotter \"%s\" \"%s\"",
+        "python3 \"%s\" HeatConductionReferenceExamplePlotter \"%s\" \"%s\"",
         plotterPath.c_str(), jsonDataPath.c_str(), videoOutputPath.c_str());
 
     int code = system(command);

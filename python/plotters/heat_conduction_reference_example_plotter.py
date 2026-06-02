@@ -1,57 +1,79 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import matplotlib.animation as manimation
-from mpl_toolkits.mplot3d import Axes3D
-import json
-import os
 from plotters.abstract_plotter import AbstractPlotter
 
 
 class HeatConductionReferenceExamplePlotter(AbstractPlotter):
 
     def plot(self):
+
         M = self.data[0]['data']['M']
-        N = len(self.data)
+        frames = len(self.data)
 
-        fig = None
-        writer = None
+        N = 3 * M + 1
 
-        try:
-            fig = plt.figure()
+        fig, ax = plt.subplots(figsize=(8, 8))
 
-            writer = manimation.FFMpegWriter(fps=25)
+        writer = manimation.FFMpegWriter(fps=25)
 
-            writer.setup(fig, self.output_path, 200)
-        except FileNotFoundError:
-            fig = plt.figure()
+        writer.setup(fig, self.output_path, 200)
 
-            writer = manimation.ImageMagickWriter(fps=25)
-
-            output_path = os.path.splitext(self.output_path)[0] + '.gif'
-
-            writer.setup(fig, output_path, 200)
-
-        x = np.linspace(0, 1, num=M + 1)
-        y = np.linspace(0, 1, num=M + 1)
+        x = np.linspace(0, 3, N)
+        y = np.linspace(0, 3, N)
 
         X, Y = np.meshgrid(x, y)
 
-        for t in range(N):
-            Z = np.array(self.data[t]['data']['fn'])
+        for k in range(frames):
 
-            Z = Z.reshape((M + 1, M + 1))
+            Z = np.array(
+                self.data[k]['data']['fn'],
+                dtype=float
+            )
 
-            plt.title('Time: %.3f' % (self.data[t]['time']))
+            Z = Z.reshape((N, N))
 
-            try:
-                ax = fig.add_subplot(projection='3d')
+            # Вырезанный квадрат [1,2] × [2,3]
+            mask = (
+                (X >= 1.0) &
+                (X <= 2.0) &
+                (Y >= 2.0) &
+                (Y <= 3.0)
+            )
 
-                ax.plot_surface(X, Y, Z, cmap=plt.cm.jet)
-            except AttributeError:
-                ax = fig.gca(projection='3d')
+            Z = np.ma.array(Z, mask=mask)
 
-                ax.plot_surface(X, Y, Z, cmap=plt.cm.jet)
+            ax.clear()
+
+            contour = ax.contourf(
+                X,
+                Y,
+                Z,
+                levels=20,
+                cmap=plt.cm.jet
+            )
+
+            ax.contour(
+                X,
+                Y,
+                Z,
+                levels=20,
+                colors='black',
+                linewidths=0.5
+            )
+
+            ax.set_title(
+                f"Time = {self.data[k]['time']:.4f}"
+            )
+
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+
+            ax.set_xlim(0, 3)
+            ax.set_ylim(0, 3)
+
+            ax.set_aspect('equal')
 
             writer.grab_frame()
 
-            plt.clf()
+        writer.finish()
